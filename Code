@@ -1,8 +1,6 @@
-//Define sensors and servos
- 
 #include <Servo.h> //Includes servo library
  
-Servo finger1, finger2, finger3, finger4, finger5;
+Servo finger1, finger2, finger3, finger4;
  
 int servoPin1 = 2;
 int servoPin2 = 3;
@@ -18,42 +16,37 @@ int flexPin4 = A3;
  
 void setup()
 {
-  //Attach the servo objects to their respective pins
+  //gives each servo a pin for usage
   finger1.attach(servoPin1);
   finger2.attach(servoPin2);
   finger3.attach(servoPin3);
   finger4.attach(servoPin4);
   
-  /* set each servo pin to output; I'm not acutally sure if this is
-  even necessary, but I did just in case it is */
+  //makes each servo pin an output pin (for outputing the information)
   pinMode(servoPin1, OUTPUT);
   pinMode(servoPin2, OUTPUT);
   pinMode(servoPin3, OUTPUT);
   pinMode(servoPin4, OUTPUT);
   
-  //Set each flex sensor pin to input: this is necessary
+  //Set each flex sensor pin to input (for taking information)
   pinMode(flexPin1, INPUT);
   pinMode(flexPin2, INPUT);
   pinMode(flexPin3, INPUT);
   pinMode(flexPin4, INPUT);
 
-  
+  //allows Arduino to transmit to computer for debuging
   Serial.begin(9600);
 }
  
 void loop()
-{
-  delay(100);
-  
-  //Defines analog input variables
+{ 
+  //creates variables holding information from each flex sensor
   int flex1 = analogRead(flexPin1);
   int flex2 = analogRead(flexPin2);
   int flex3 = analogRead(flexPin3);
   int flex4 = analogRead(flexPin4);
   
-  /* Defines "pos" variables as being proportional to the flex inputs.
-  The 400 to 700 value range seemed adequate for my sensors, but you can change
-  yours accordingly. */
+  //changes flex sensor readout to a number useable by servo motors
   int pos1 = map(flex1, 400, 700, 0, 180);
   pos1 = constrain(pos1, 0, 180);
   int pos2 = map(flex2, 400, 700, 0, 180);
@@ -63,12 +56,13 @@ void loop()
   int pos4 = map(flex4, 480, 640, 0, 180);
   pos4 = constrain(pos4, 0, 180);
   
-  //Tells servos to move by the amount specified in the "pos" variables
+  //makes servos move to the specified position
   finger1.write(pos1);
   finger2.write(pos2);
   finger3.write(pos3);
   finger4.write(pos4);
 
+  //prints servo position for debugging
   Serial.print(pos1);
   Serial.print(" ");
   Serial.print(pos2);
@@ -77,4 +71,3 @@ void loop()
   Serial.print(" ");
   Serial.println(pos4);
 }
- 
